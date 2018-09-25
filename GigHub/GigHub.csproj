@@ -218,6 +218,10 @@
     <Compile Include="Migrations\201809242136145_addSomeGenres.Designer.cs">
       <DependentUpon>201809242136145_addSomeGenres.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201809251944286_addForeinKeys.cs" />
+    <Compile Include="Migrations\201809251944286_addForeinKeys.Designer.cs">
+      <DependentUpon>201809251944286_addForeinKeys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -319,6 +323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201809242136145_addSomeGenres.resx">
       <DependentUpon>201809242136145_addSomeGenres.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201809251944286_addForeinKeys.resx">
+      <DependentUpon>201809251944286_addForeinKeys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
