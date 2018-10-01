@@ -8,17 +8,21 @@
 
 @using (Html.BeginForm("Create", "Gigs"))
 {
+    @Html.AntiForgeryToken()
     <div class="form-group">
         @Html.LabelFor(m => m.Venue)
         @Html.TextBoxFor(m=>m.Venue, new {@class = "form-control"})
+        @Html.ValidationMessageFor(c=>c.Venue)
     </div>
     <div class="form-group">
         @Html.LabelFor(m=>m.Date)
         @Html.TextBoxFor(m=>m.Date, new {@class="form-control"})
+       @Html.ValidationMessageFor(c=>c.Date)
     </div>
     <div class="form-group">
         @Html.LabelFor(m=>m.Time)
         @Html.TextBoxFor(m=>m.Time, new {@class="form-control"})
+        @Html.ValidationMessageFor(c=>c.Time)
     </div>
     <div class="form-group">
         @Html.DropDownListFor(m=>m.Genre,new SelectList(Model.Genres,"Id","Name"," "), new {@class="form-control"})
@@ -26,4 +30,7 @@
     </div>
     <button type="submit" value="Save" class="btn btn-primary">Save</button>
 }
-
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
