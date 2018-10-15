@@ -2,9 +2,7 @@
 using GigHub.Dtos;
 using GigHub.Models;
 using Microsoft.AspNet.Identity;
-using System.Web;
 using System.Web.Http;
-
 
 namespace GigHub.Controllers
 {

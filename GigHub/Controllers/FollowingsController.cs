@@ -13,7 +13,7 @@ namespace GigHub.Controllers
 
         public FollowingsController()
         {
-            _context = new ApplicationDbContext();
+            _context = new ApplicationDbContext();    
         }
 
         [HttpPost]
