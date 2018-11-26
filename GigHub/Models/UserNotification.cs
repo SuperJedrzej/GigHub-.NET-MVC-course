@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.UI.WebControls.Expressions;
 
 namespace GigHub.Models
 {
@@ -27,13 +26,14 @@ namespace GigHub.Models
 
         public UserNotification(ApplicationUser user, Notification notification)
         {
-            if(user == null)
+            if (user == null)
                 throw new ArgumentNullException("user");
-            if(notification == null)
-                throw  new ArgumentNullException("notification");
+
+            if (notification == null)
+                throw new ArgumentNullException("notification");
+
             User = user;
             Notification = notification;
         }
-            
     }
 }

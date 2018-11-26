@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Web.Http;
 using GigHub.Dtos;
 using GigHub.Models;

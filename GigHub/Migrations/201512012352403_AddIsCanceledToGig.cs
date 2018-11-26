@@ -3,16 +3,16 @@ namespace GigHub.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AddNameToAppUser : DbMigration
+    public partial class AddIsCanceledToGig : DbMigration
     {
         public override void Up()
         {
-            AddColumn("dbo.AspNetUsers", "Name", c => c.String(nullable: false, maxLength: 100));
+            AddColumn("dbo.Gigs", "IsCanceled", c => c.Boolean(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.AspNetUsers", "Name");
+            DropColumn("dbo.Gigs", "IsCanceled");
         }
     }
 }
