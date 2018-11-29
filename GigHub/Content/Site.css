@@ -107,6 +107,11 @@ h6,
   height: 44px;
   -ms-border-radius: 9px;
   border-radius: 9px;
+  transition: none;
+  -webkit-transition: none;
+}
+.form-control:focus {
+  box-shadow: none;
 }
 .btn {
   /*font-size: 17px;
@@ -136,29 +141,29 @@ h6,
   font-weight: bold;
   padding: 2px 6px;
 }
-.gigs > li > li .date .day {
+.gigs > li .date .day {
   background: #f7f7f7;
   color: #333;
   font-size: 20px;
   padding: 6px 12px;
 }
-.gigs > li > li .details {
+.gigs > li .details {
   position: absolute;
   top: 0;
   left: 70px;
 }
-.gigs > li > li .details .artist {
+.gigs > li .details .artist {
   font-weight: bold;
   display: block;
 }
-.gigs > li > li .details .genre {
+.gigs > li .details .genre {
   font-size: 15px;
 }
-.gigs > li > li .actions {
+.gigs > li .actions {
   font-size: 15px;
   display: none;
 }
-.gigs > li > li:hover .actions {
+.gigs > li:hover .actions {
   display: block;
 }
 .popover-notifications .popover-content {
@@ -179,5 +184,8 @@ h6,
   font-weight: bold;
 }
 #searchGigs {
-  width: 300px;
+  width: 400px;
+}
+#searchGigs input {
+  max-width: none;
 }
