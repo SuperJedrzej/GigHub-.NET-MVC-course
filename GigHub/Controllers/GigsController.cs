@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
+﻿using GigHub.Core;
 using GigHub.Core.Models;
-using GigHub.Core.Repositories;
 using GigHub.Core.ViewModels;
 using GigHub.Persistence;
-using Ninject;
+using Microsoft.AspNet.Identity;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace GigHub.Controllers
 {
@@ -20,6 +16,30 @@ namespace GigHub.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
+        public ActionResult Details(int id)
+        {
+            var gig = _unitOfWork.Gigs.GetGig(id);
+
+            if (gig == null)
+                return HttpNotFound();
+
+            var viewModel = new GigDetailsViewModel { Gig = gig };
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+
+                viewModel.IsAttending = 
+                    _unitOfWork.Attendances.GetAttendance(gig.Id, userId) != null;
+
+                viewModel.IsFollowing = 
+                    _unitOfWork.Followings.GetFollowing(userId, gig.ArtistId) != null;
+            }
+
+            return View("Details", viewModel);
+        }
+
 
         [Authorize]
         public ActionResult Mine()
@@ -46,31 +66,10 @@ namespace GigHub.Controllers
             return View("Gigs", viewModel);
         }
 
-
         [HttpPost]
         public ActionResult Search(GigsViewModel viewModel)
         {
-            return RedirectToAction("Index", "Home", new {query = viewModel.SearchTerm});
-        }
-
-        public ActionResult Details(int id)
-        {
-            var gig = _unitOfWork.Gigs.GetGigDetails(id);
-
-            if (gig == null)
-                return HttpNotFound();
-
-            var viewModel = new GigDetailsViewModel {Gig = gig}; 
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-
-                viewModel.IsAttending = _unitOfWork.Attendances.GetAttendance(gig.Id,userId) != null;
-                viewModel.IsFollowing = _unitOfWork.Followings.GetFollowing(userId, gig.ArtistId) != null;
-            }
-
-            return View("Details", viewModel);
+            return RedirectToAction("Index", "Home", new { query = viewModel.SearchTerm });
         }
 
         [Authorize]
@@ -88,14 +87,19 @@ namespace GigHub.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
-            var userId = User.Identity.GetUserId();
             var gig = _unitOfWork.Gigs.GetGig(id);
+
+            if (gig == null)
+                return HttpNotFound();
+
+            if (gig.ArtistId != User.Identity.GetUserId())
+                return new HttpUnauthorizedResult();
 
             var viewModel = new GigFormViewModel
             {
                 Heading = "Edit a Gig",
                 Id = gig.Id,
-                Genres = new ApplicationDbContext().Genres.ToList(),
+                Genres = _unitOfWork.Genres.GetGenres(),
                 Date = gig.DateTime.ToString("d MMM yyyy"),
                 Time = gig.DateTime.ToString("HH:mm"),
                 Genre = gig.GenreId,
@@ -112,7 +116,7 @@ namespace GigHub.Controllers
         {
             if (!ModelState.IsValid)
             {
-                viewModel.Genres = new ApplicationDbContext().Genres.ToList();
+                viewModel.Genres = _unitOfWork.Genres.GetGenres();
                 return View("GigForm", viewModel);
             }
 
@@ -137,7 +141,7 @@ namespace GigHub.Controllers
         {
             if (!ModelState.IsValid)
             {
-                viewModel.Genres = new ApplicationDbContext().Genres.ToList();
+                viewModel.Genres = _unitOfWork.Genres.GetGenres();
                 return View("GigForm", viewModel);
             }
 
@@ -147,7 +151,7 @@ namespace GigHub.Controllers
                 return HttpNotFound();
 
             if (gig.ArtistId != User.Identity.GetUserId())
-                return HttpNotFound();
+                return new HttpUnauthorizedResult();
 
             gig.Modify(viewModel.GetDateTime(), viewModel.Venue, viewModel.Genre);
             
