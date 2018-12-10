@@ -1,12 +1,14 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
-using System.Web.Http;
+using System.Web;
+using System.Web.Mvc;
+using Moq;
 
-namespace GigHub.Tests.Extensions
+namespace GigHub.IntegrationTests.Extensions
 {
-    public static class ApiControllerExtensions
+    public static class ControllerExtensions
     {
-        public static void MockCurrentUser(this ApiController controller, string userId, string username)
+        public static void MockCurrentUser(this Controller controller, string userId, string username)
         {
             var identity = new GenericIdentity(username);
             identity.AddClaim(
@@ -16,7 +18,9 @@ namespace GigHub.Tests.Extensions
 
             var principal = new GenericPrincipal(identity, null);
 
-            controller.User = principal;
+            controller.ControllerContext = Mock.Of<ControllerContext>(ctx =>
+                ctx.HttpContext == Mock.Of<HttpContextBase>(http =>
+                    http.User == principal));
         }
     }
 }

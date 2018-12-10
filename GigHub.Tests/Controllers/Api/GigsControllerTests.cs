@@ -1,10 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Web.Http.Results;
-using FluentAssertions;
+﻿using FluentAssertions;
 using GigHub.Controllers.Api;
 using GigHub.Core;
 using GigHub.Core.Models;
@@ -12,12 +6,10 @@ using GigHub.Core.Repositories;
 using GigHub.Tests.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Web.Http.Results;
 
 namespace GigHub.Tests.Controllers.Api
 {
-    /// <summary>
-    /// Summary description for GigsControllerTests
-    /// </summary>
     [TestClass]
     public class GigsControllerTests
     {
@@ -25,7 +17,8 @@ namespace GigHub.Tests.Controllers.Api
         private Mock<IGigRepository> _mockRepository;
         private string _userId;
 
-        public GigsControllerTests()
+        [TestInitialize]
+        public void TestInitialize()
         {
             _mockRepository = new Mock<IGigRepository>();
 
@@ -34,7 +27,7 @@ namespace GigHub.Tests.Controllers.Api
 
             _controller = new GigsController(mockUoW.Object);
             _userId = "1";
-            _controller.MockCurrentUser(_userId,"user1@domain.com");
+            _controller.MockCurrentUser(_userId, "user1@domain.com");
         }
 
         [TestMethod]
@@ -59,9 +52,9 @@ namespace GigHub.Tests.Controllers.Api
         }
 
         [TestMethod]
-        public void Cancel_UserCancelingAnotherUserGig_ShouldReturnUnauthorized ()
+        public void Cancel_UserCancelingAnotherUsersGig_ShouldReturnUnauthorized()
         {
-            var gig = new Gig{ArtistId =  _userId + "-"};
+            var gig = new Gig { ArtistId = _userId + "-" };
 
             _mockRepository.Setup(r => r.GetGigWithAttendees(1)).Returns(gig);
 
@@ -81,5 +74,6 @@ namespace GigHub.Tests.Controllers.Api
 
             result.Should().BeOfType<OkResult>();
         }
+
     }
 }

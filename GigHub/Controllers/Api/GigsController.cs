@@ -23,7 +23,6 @@ namespace GigHub.Controllers.Api
             if (gig == null || gig.IsCanceled)
                 return NotFound();
 
-
             if (gig.ArtistId != userId)
                 return Unauthorized();
 
